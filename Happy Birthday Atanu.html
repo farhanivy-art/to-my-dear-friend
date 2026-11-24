@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday Atanu</title>
+<style>
+:root{--bg1:#ffd6e3;--bg2:#ffc0cb;--card:#fff;--text:#4a2a38;--accent:#ff69b4;--muted:#8a5a6c;--btn:#fff0f6;--btnb:#ffb3d1;--shadow:rgba(255,105,180,.3);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2a1020;--bg2:#3a1630;--card:#2b1b25;--text:#ffe4ee;--accent:#ff7ab8;--muted:#d9a3bb;--btn:#3a2230;--btnb:#7a3a5c;--shadow:rgba(255,105,180,.25)}}
+:root[data-theme="dark"]{--bg1:#2a1020;--bg2:#3a1630;--card:#2b1b25;--text:#ffe4ee;--accent:#ff7ab8;--muted:#d9a3bb;--btn:#3a2230;--btnb:#7a3a5c;--shadow:rgba(255,105,180,.25)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:Arial,sans-serif;text-align:center;color:var(--text);background:linear-gradient(160deg,var(--bg1),var(--bg2));background-color:var(--bg2);overflow-x:hidden}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2000}
+.balloon{position:fixed;bottom:-120px;width:46px;height:58px;border-radius:50% 50% 48% 48%;opacity:.85;animation:rise linear infinite;z-index:0}
+.balloon:after{content:"";position:absolute;left:50%;top:100%;width:1px;height:50px;background:var(--muted)}
+@keyframes rise{to{transform:translateY(-120vh) rotate(8deg)}}
+.container{position:relative;z-index:1;max-width:400px;margin:40px auto;background:var(--card);padding:1.5rem 2rem 2rem;border-radius:14px;box-shadow:0 4px 18px var(--shadow)}
+h1{color:var(--accent);margin:.2em 0 .4em;animation:pop .8s ease}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.cake{width:200px;height:170px;cursor:pointer}
+.flame{transform-origin:center bottom;animation:flick .4s ease-in-out infinite alternate;transition:opacity .4s}
+.flame.out{opacity:0;animation:none}
+@keyframes flick{from{transform:scale(1,1) rotate(-3deg)}to{transform:scale(.85,1.15) rotate(3deg)}}
+.smoke{opacity:0}.smoke.on{animation:smoke 1.6s ease-out}
+@keyframes smoke{from{opacity:.7;transform:translateY(0)}to{opacity:0;transform:translateY(-25px)}}
+.hint{color:var(--muted);font-size:.9rem;min-height:1.2em}
+.main{display:none}
+.main.show{display:block;animation:pop .6s ease}
+.options button,.cta{width:100%;padding:10px;margin:5px 0;font-size:1rem;border-radius:8px;border:2px solid var(--btnb);background:var(--btn);color:var(--text);cursor:pointer;transition:transform .15s,background .15s}
+.options button:hover{transform:scale(1.04);background:var(--accent);color:#fff}
+.cta{background:var(--accent);color:#fff;border-color:var(--accent);width:auto;padding:10px 22px;margin-top:10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center;z-index:1000;padding:1rem}
+.modal-content{background:var(--card);color:var(--text);padding:2rem;border-radius:12px;max-width:320px;animation:pop .4s ease}
+.modal-content .big{font-size:2.6rem}
+.modal-content p{font-size:1.15rem}
+.modal-content button{padding:8px 24px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-size:1rem;cursor:pointer}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div id="balloons"></div>
+<div class="container">
+  <h1>Happy Birthday Atanu Sarkar!</h1>
+  <svg class="cake" id="cake" viewBox="0 0 200 170" onclick="blow()" role="button" aria-label="Birthday cake">
+    <ellipse cx="100" cy="158" rx="85" ry="9" fill="#000" opacity=".12"/>
+    <rect x="25" y="110" width="150" height="45" rx="8" fill="#a8643e"/>
+    <rect x="40" y="70" width="120" height="45" rx="8" fill="#ff8fb8"/>
+    <path d="M40 82q10 14 20 0t20 0 20 0 20 0 20 0v-8q0-4-4-4H44q-4 0-4 4z" fill="#fff"/>
+    <path d="M25 122q12 14 25 0t25 0 25 0 25 0 25 0v-8q0-4-4-4H29q-4 0-4 4z" fill="#ffe4ee"/>
+    <g fill="#6ec6ff"><rect x="75" y="48" width="8" height="24" rx="2"/></g>
+    <g fill="#ffd54f"><rect x="96" y="48" width="8" height="24" rx="2"/></g>
+    <g fill="#9ccc65"><rect x="117" y="48" width="8" height="24" rx="2"/></g>
+    <g class="flame" id="f1"><ellipse cx="79" cy="40" rx="5" ry="9" fill="#ff9800"/><ellipse cx="79" cy="42" rx="2.5" ry="5" fill="#ffeb3b"/></g>
+    <g class="flame" id="f2" style="animation-delay:.1s"><ellipse cx="100" cy="40" rx="5" ry="9" fill="#ff9800"/><ellipse cx="100" cy="42" rx="2.5" ry="5" fill="#ffeb3b"/></g>
+    <g class="flame" id="f3" style="animation-delay:.2s"><ellipse cx="121" cy="40" rx="5" ry="9" fill="#ff9800"/><ellipse cx="121" cy="42" rx="2.5" ry="5" fill="#ffeb3b"/></g>
+    <g class="smoke" id="sm" fill="none" stroke="#999" stroke-width="2"><path d="M79 34q-4-8 0-14"/><path d="M100 34q4-8 0-14"/><path d="M121 34q-4-8 0-14"/></g>
+  </svg>
+  <p class="hint" id="hint">Tap the cake to blow out the candles 🎂</p>
+
+  <div class="main" id="main">
+    <p>Q. What am I to you?</p>
+    <div class="options">
+      <button onclick="showReply('love')">love</button>
+      <button onclick="showReply('boyfriend')">boyfriend</button>
+      <button onclick="showReply('soul mate')">soul mate</button>
+      <button onclick="showReply('BFF')">BFF</button>
+    </div>
+    <button class="cta" onclick="party()">🎉 More confetti!</button>
+  </div>
+</div>
+
+<div id="replyModal" class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-content">
+    <div class="big" id="emoji">💖</div>
+    <p id="replyText">love u 3000</p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<script>
+var replies={
+  'love':['💖','love u 3000'],
+  'boyfriend':['😘','love u 3000, always by your side!'],
+  'soul mate':['✨','love u 3000, you complete me!'],
+  'BFF':['🤝','love u 3000, best friends forever!']
+};
+function showReply(o){
+  var r=replies[o]||replies['love'];
+  document.getElementById('emoji').textContent=r[0];
+  document.getElementById('replyText').textContent=r[1];
+  document.getElementById('replyModal').style.display='flex';
+  party();
+}
+function closeModal(){document.getElementById('replyModal').style.display='none'}
+
+var blown=false;
+function blow(){
+  if(blown)return; blown=true;
+  ['f1','f2','f3'].forEach(function(id){document.getElementById(id).classList.add('out')});
+  document.getElementById('sm').classList.add('on');
+  document.getElementById('hint').textContent='Wish granted! 🎈';
+  document.getElementById('main').classList.add('show');
+  party();
+}
+
+/* balloons */
+(function(){
+  var cols=['#ff6b9d','#ffd54f','#6ec6ff','#9ccc65','#ba68c8','#ff8a65'],box=document.getElementById('balloons');
+  for(var i=0;i<12;i++){
+    var b=document.createElement('div');b.className='balloon';
+    b.style.left=(Math.random()*95)+'%';
+    b.style.background=cols[i%cols.length];
+    b.style.animationDuration=(9+Math.random()*9)+'s';
+    b.style.animationDelay=(-Math.random()*12)+'s';
+    box.appendChild(b);
+  }
+})();
+
+/* confetti */
+var cv=document.getElementById('fx'),cx=cv.getContext('2d'),bits=[],running=false;
+function size(){cv.width=innerWidth;cv.height=innerHeight}
+size();addEventListener('resize',size);
+function party(){
+  var cols=['#ff6b9d','#ffd54f','#6ec6ff','#9ccc65','#ba68c8','#ff8a65'];
+  for(var i=0;i<120;i++){
+    bits.push({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*12-3,
+      w:6+Math.random()*6,h:4+Math.random()*5,c:cols[(Math.random()*cols.length)|0],r:Math.random()*6,vr:(Math.random()-.5)*.4});
+  }
+  if(!running){running=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  bits=bits.filter(function(p){return p.y<cv.height+20});
+  bits.forEach(function(p){
+    p.vy+=.28;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore();
+  });
+  if(bits.length)requestAnimationFrame(tick);else{running=false;cx.clearRect(0,0,cv.width,cv.height)}
+}
+</script>
+</body>
+</html>
